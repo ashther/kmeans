@@ -28,6 +28,7 @@ centerNew <- function(df_with_cat){
 }
 
 km <- function(df, k = 2, thr = 0.95, n = 1000){
+    result <- list()
     N <- 0
     n_row <- dim(df)[1]
     n_col <- dim(df)[2]
@@ -55,8 +56,9 @@ km <- function(df, k = 2, thr = 0.95, n = 1000){
             category <- category_temp
         }
     }
-    
-    return(cbind(df, category))
+    result[['cluster']] <- category
+    result[['center']] <- centerNew(cbind(df, category))
+    return(result)
 }
 
 
