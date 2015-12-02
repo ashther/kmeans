@@ -69,7 +69,7 @@ df1 <- matrix(rnorm(50, 0.25, 0.1), 25, 2)
 df2 <- matrix(rnorm(50, 0.75, 0.1), 25, 2)
 df <- rbind(df1, df2)
 result <- km(df)
-qplot(df[, 1], df[, 2], color = result$cluster)
+qplot(df[, 1], df[, 2], color = as.factor(result$cluster))
 
 
 
