@@ -14,13 +14,17 @@ dis <- function(df, center){
 }
 
 centerNew <- function(df_with_cat){
-    cat <- unique(df_with_cat[, ncol(df_with_cat)])
-    result <- matrix(NA, length(cat), ncol(df_with_cat) - 1)
+    cat_col <- df_with_cat[, ncol(df_with_cat)]
+    cat_unique <- unique(cat_col)
+    n_col <- ncol(df_with_cat)
+    
+    result <- matrix(NA, length(cat_unique), n_col - 1)
+    
     for (i in 1:nrow(result)) {
         result[i, ] <- tryCatch(
-            {apply(df_with_cat[df_with_cat[, ncol(df_with_cat)] == cat[i], -ncol(df_with_cat)], 2, mean)}, 
+            {apply(df_with_cat[cat_col == cat_unique[i], -n_col], 2, mean)}, 
             error = function(e){
-                return(df_with_cat[df_with_cat[, ncol(df_with_cat)] == cat[i], -ncol(df_with_cat)])
+                return(df_with_cat[cat_col == cat_unique[i], -n_col])
             }
         ) 
     }
