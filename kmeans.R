@@ -22,7 +22,7 @@ centerNew <- function(df_with_cat){
     
     for (i in 1:nrow(result)) {
         result[i, ] <- tryCatch(
-            {apply(df_with_cat[cat_col == cat_unique[i], -n_col], 2, mean)}, 
+            {colMeans(df_with_cat[cat_col == cat_unique[i], -n_col])}, 
             error = function(e){
                 return(df_with_cat[cat_col == cat_unique[i], -n_col])
             }
@@ -40,7 +40,7 @@ km <- function(df, k = 2, thr = 0.95, n = 1000){
     limit_max <- apply(df, 2, max)
     limit_min <- apply(df, 2, min)
     
-    center <- k * n_col %>% 
+    category <- k * n_col %>% 
         runif(limit_min, limit_max) %>% 
         matrix(nrow = k, ncol = n_col) %>% 
         dis(df, .) %>% 
@@ -65,7 +65,11 @@ km <- function(df, k = 2, thr = 0.95, n = 1000){
     return(result)
 }
 
-
+df1 <- matrix(rnorm(50, 0.25, 0.1), 25, 2)
+df2 <- matrix(rnorm(50, 0.75, 0.1), 25, 2)
+df <- rbind(df1, df2)
+result <- km(df)
+qplot(df[, 1], df[, 2], color = result$cluster)
 
 
 
