@@ -21,12 +21,8 @@ centerNew <- function(df_with_cat){
     result <- matrix(NA, length(cat_unique), n_col - 1)
     
     for (i in 1:nrow(result)) {
-        result[i, ] <- tryCatch(
-            {colMeans(df_with_cat[cat_col == cat_unique[i], -n_col])}, 
-            error = function(e){
-                return(df_with_cat[cat_col == cat_unique[i], -n_col])
-            }
-        ) 
+        result[i, ] <- colMeans(df_with_cat[cat_col == cat_unique[i], -n_col, 
+                                            drop = FALSE]) 
     }
     return(result)
 }
