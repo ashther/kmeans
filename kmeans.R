@@ -31,17 +31,16 @@ centerNew <- function(df_with_cat){
     return(result)
 }
 
-km <- function(df, k = 2, thr = 0.95, n = 1000){
+km <- function(df, k, thr = 0.95, n = 1000){
     result <- list()
     N <- 0
     n_row <- dim(df)[1]
     n_col <- dim(df)[2]
     
-    limit_max <- apply(df, 2, max)
-    limit_min <- apply(df, 2, min)
+    limit_max <- max(df)
+    limit_min <- min(df)
     
-    category <- k * n_col %>% 
-        runif(limit_min, limit_max) %>% 
+    category <- runif(k * n_col, limit_min, limit_max) %>% 
         matrix(nrow = k, ncol = n_col) %>% 
         dis(df, .) %>% 
         apply(1, which.min)
@@ -62,13 +61,17 @@ km <- function(df, k = 2, thr = 0.95, n = 1000){
     }
     result[['cluster']] <- category
     result[['center']] <- centerNew(cbind(df, category))
+    result[['n']] <- N
     return(result)
 }
 
 df1 <- matrix(rnorm(50, 0.25, 0.1), 25, 2)
-df2 <- matrix(rnorm(50, 0.75, 0.1), 25, 2)
-df <- rbind(df1, df2)
-result <- km(df)
+df2 <- matrix(rnorm(50, 0.75, 0.05), 25, 2)
+df3_x <- rnorm(50, 0.3, 0.05)
+df3_y <- rnorm(50, 0.8, 0.1)
+df3 <- cbind(df3_x, df3_y)
+df <- rbind(df1, df2, df3)
+result <- km(df, k = 3)
 qplot(df[, 1], df[, 2], color = as.factor(result$cluster))
 
 
